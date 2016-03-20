@@ -2,13 +2,11 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class PlayerController : NetworkBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+public class PlayerController : NetworkBehaviour
+{
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
+    	
 	// Update is called once per frame
 	void Update ()
     {
@@ -21,6 +19,24 @@ public class PlayerController : NetworkBehaviour {
 
         transform.Rotate(0, x, 0);
         transform.Translate(0, 0, z);
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            CmdFire();
+        }
+    }
+
+    [Command]
+    void CmdFire()
+    {
+        var bullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+
+        // Spawn the bullet on the Clients
+        NetworkServer.Spawn(bullet);
+
+        Destroy(bullet, 2.0f);
     }
 
     public override void OnStartLocalPlayer()
