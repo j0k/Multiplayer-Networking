@@ -1,0 +1,8 @@
+Library/
+*.csproj
+*.userprefs
+*.sln
+*.exe
+*.pdb
+Multiplayer-Networking_Data/
+UpgradeLog.htm
