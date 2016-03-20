@@ -8,6 +8,8 @@ public class Health : NetworkBehaviour
 
     public const int maxHealth = 100;
 
+    public bool destroyOnDeath;
+
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth = maxHealth;
     public RectTransform healthBar;
@@ -20,9 +22,16 @@ public class Health : NetworkBehaviour
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
-            currentHealth = maxHealth;
+            if (destroyOnDeath)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                currentHealth = maxHealth;
 
-            RpcRespawn();
+                RpcRespawn();
+            }
         }
 
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
